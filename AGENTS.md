@@ -54,6 +54,12 @@ This exists because a static top-level `import { useUserSession } from '#imports
 
 **Schema handling.** There's no module-level schema option — `usePostgrest`/`usePostgrestUser`/`usePostgrestAdmin` always target `public`. `SchemaKeys<DB>`/`DefaultSchema<DB>` in `createPostgrestClient.ts` derive the available Postgres schemas directly from the generated `Database` type, so calling `createPostgrestClient<Database, 'schema_name'>({ ..., schema: 'schema_name' })` (or `.schema('schema_name')` on any client) for multi-schema/per-tenant use stays fully typed.
 
+## Release process
+
+`pnpm release` bumps the version via `changelogen` (reads conventional commits since the last tag — `fix:`/`feat:`/a `BREAKING CHANGE:` footer decide patch/minor/major), runs the full local check suite and real build, commits, tags, and pushes. The pushed tag triggers `.github/workflows/release.yml`, which re-runs the checks in CI and publishes to npm via trusted publishing (OIDC) — no token stored anywhere, nothing to rotate. New versions then sit in npm's automated security review for a few minutes ("Validating" on npm) before becoming installable; that's expected.
+
+This publishes publicly and pushes real tags/commits to the actual repo — treat it like any other irreversible, external-effect action. Don't run `pnpm release` unless explicitly asked to.
+
 ## Testing notes
 
 - `test/unit/` needs no live services.

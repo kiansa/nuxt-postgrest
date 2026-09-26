@@ -48,4 +48,8 @@ There's no pluggable-provider mechanism beyond this. Every other auth library is
 pnpm release
 ```
 
-Runs lint, tests, the build, bumps the version with `changelogen`, and tags. Pushing the tag triggers `.github/workflows/release.yml`, which publishes to npm via trusted publishing and creates the GitHub release.
+Runs lint, tests, type checks and the real build, bumps the version with `changelogen` (based on conventional commits since the last tag — `fix:` → patch, `feat:` → minor, a `BREAKING CHANGE:` footer → major), commits, tags, and pushes.
+
+The pushed tag triggers `.github/workflows/release.yml`, which re-runs the full check suite in a clean CI environment and publishes to npm via trusted publishing (OIDC) — no `NPM_TOKEN`, nothing to rotate, no manual `npm publish`. It also creates the GitHub release and changelog entry.
+
+After publishing, the new version sits in npm's automated security review for a few minutes (shown as "Validating" on the package's npm page) before it's actually installable. That's expected, not a failure — no action needed, just wait it out.
