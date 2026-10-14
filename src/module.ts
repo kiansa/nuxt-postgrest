@@ -101,55 +101,64 @@ export default defineNuxtModule<ModuleOptions>({
       logger.debug('nuxt-auth-utils detected — reading the PostgREST JWT from its session automatically')
     }
 
+    // Emitted as plain JS (+ separate .d.ts typings): buildDir lives under node_modules by default,
+    // and Nitro doesn't run its TypeScript transform on files there, so raw TS would fail `nuxt build`.
     addTemplate({
-      filename: 'postgrest-token-app.ts',
+      filename: 'postgrest-token-app.mjs',
       write: true,
       getContents: () => hasAuthUtils
         ? `import { useUserSession } from '#imports'
 
 // Client-visible session data. Tokens stored under \`secure\` are server-only by design.
-export function getAccessToken(tokenKey: string): string | undefined {
+export function getAccessToken(tokenKey) {
   const { session } = useUserSession()
-  const value = (session.value as Record<string, unknown> | null | undefined)?.[tokenKey]
+  const value = session.value?.[tokenKey]
   return typeof value === 'string' ? value : undefined
 }
 `
-        : `export function getAccessToken(_tokenKey: string): string | undefined {
+        : `export function getAccessToken(_tokenKey) {
   return undefined
 }
 `,
     })
+    addTemplate({
+      filename: 'postgrest-token-app.d.ts',
+      write: true,
+      getContents: () => `export declare function getAccessToken(tokenKey: string): string | undefined
+`,
+    })
 
     addTemplate({
-      filename: 'postgrest-token-server.ts',
+      filename: 'postgrest-token-server.mjs',
       write: true,
       getContents: () => hasAuthUtils
-        ? `import type { H3Event } from 'h3'
-// \`getUserSession\` only exists in Nitro's #imports. Nuxt also type-checks Nitro utils in the app
-// context, where it's missing, so the check is suppressed here. Server type-checks still cover it.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { getUserSession } from '#imports'
+        ? `import { getUserSession } from '#imports'
 
-export async function getAccessToken(event: H3Event, tokenKey: string): Promise<string | undefined> {
-  const session = await getUserSession(event) as Record<string, unknown> & { secure?: Record<string, unknown> }
+export async function getAccessToken(event, tokenKey) {
+  const session = await getUserSession(event)
   // Prefer the server-only \`secure\` field, fall back to the public session field
   const value = session?.secure?.[tokenKey] ?? session?.[tokenKey]
   return typeof value === 'string' ? value : undefined
 }
 `
-        : `import type { H3Event } from 'h3'
-
-export async function getAccessToken(_event: H3Event, _tokenKey: string): Promise<string | undefined> {
+        : `export async function getAccessToken(_event, _tokenKey) {
   return undefined
 }
+`,
+    })
+    addTemplate({
+      filename: 'postgrest-token-server.d.ts',
+      write: true,
+      getContents: () => `import type { H3Event } from 'h3'
+
+export declare function getAccessToken(event: H3Event, tokenKey: string): Promise<string | undefined>
 `,
     })
 
     // Nitro's `impound` plugin blocks the `#build/*` alias from server code (it's reserved for
     // the Vue app build), so the server template needs its own alias pointing at the same file.
-    nuxt.options.alias['#postgrest-token/app'] = join(nuxt.options.buildDir, 'postgrest-token-app')
-    nuxt.options.alias['#postgrest-token/server'] = join(nuxt.options.buildDir, 'postgrest-token-server')
+    nuxt.options.alias['#postgrest-token/app'] = join(nuxt.options.buildDir, 'postgrest-token-app.mjs')
+    nuxt.options.alias['#postgrest-token/server'] = join(nuxt.options.buildDir, 'postgrest-token-server.mjs')
 
     // --- Composables ---------------------------------------------------------
     const shared = resolver.resolve('./runtime/shared/utils/createPostgrestClient')

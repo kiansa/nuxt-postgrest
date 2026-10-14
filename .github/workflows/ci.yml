@@ -22,6 +22,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm test:types
+      # Regression check: generated templates must build with the default (node_modules) buildDir
+      - run: pnpm dev:prepare && pnpm dev:build
 
   test:
     if: github.event_name != 'schedule'
