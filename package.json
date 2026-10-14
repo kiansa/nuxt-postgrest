@@ -1,6 +1,6 @@
 {
   "name": "nuxt-postgrest",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "First-class PostgREST for Nuxt: typed clients, SSR-aware composables and auth-aware JWT forwarding. No Supabase required.",
   "repository": "kiansa/nuxt-postgrest",
   "homepage": "https://kiansa.github.io/nuxt-postgrest/",
