@@ -160,6 +160,14 @@ export declare function getAccessToken(event: H3Event, tokenKey: string): Promis
     nuxt.options.alias['#postgrest-token/app'] = join(nuxt.options.buildDir, 'postgrest-token-app.mjs')
     nuxt.options.alias['#postgrest-token/server'] = join(nuxt.options.buildDir, 'postgrest-token-server.mjs')
 
+    // The generated server helper imports `#imports`, which only Nitro's bundler can resolve. Under
+    // the default buildDir (node_modules/.cache) Nitro would externalize it and Node would fail
+    // to load it in dev, so force it to be bundled.
+    nuxt.hook('nitro:config', (nitroConfig) => {
+      nitroConfig.externals ||= {}
+      nitroConfig.externals.inline = [...(nitroConfig.externals.inline || []), /postgrest-token-server/]
+    })
+
     // --- Composables ---------------------------------------------------------
     const shared = resolver.resolve('./runtime/shared/utils/createPostgrestClient')
 
