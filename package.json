@@ -24,6 +24,9 @@
     }
   },
   "main": "./dist/module.mjs",
+  "bin": {
+    "nuxt-postgrest": "./bin/nuxt-postgrest.mjs"
+  },
   "typesVersions": {
     "*": {
       ".": [
@@ -32,6 +35,7 @@
     }
   },
   "files": [
+    "bin",
     "dist"
   ],
   "packageManager": "pnpm@12.14.0",

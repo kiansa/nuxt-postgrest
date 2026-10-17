@@ -12,6 +12,7 @@ A Nuxt module (`nuxt-postgrest`) that wraps `@supabase/postgrest-js` to give Nux
 pnpm db:up            # start local Postgres + PostgREST (docker-compose) — required for tests
 pnpm db:down          # stop and wipe the local database
 pnpm dev              # playground app with live-reloading, at localhost:3000
+pnpm docs:dev         # docs site, at localhost:3002/nuxt-postgrest/ (3001 is PostgREST)
 
 pnpm lint             # eslint .
 pnpm test             # unit + e2e (needs pnpm db:up)
@@ -32,6 +33,7 @@ src/module.ts                module definition, runtime config, type-gen hook, n
 src/runtime/shared/          createPostgrestClient — the one place a PostgrestClient is constructed
 src/runtime/app/             usePostgrest (client & SSR)
 src/runtime/server/          usePostgrestUser, usePostgrestAdmin (Nitro only)
+bin/nuxt-postgrest.mjs        published CLI (`nuxt-postgrest types`): plain Node, no build step, listed in package.json `bin` + `files`
 playground/                  manual testing app — full login flow, RLS, admin & schema examples
 test/unit/                   pure-logic tests (no PostgREST needed)
 test/e2e/                    @nuxt/test-utils tests against test/fixtures/basic, real PostgREST
