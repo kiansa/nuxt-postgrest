@@ -7,6 +7,24 @@
       "skillPath": "skills/arch-nuxt-module-builder/SKILL.md",
       "computedHash": "eabab44c856dce2a43e765252401a5e7665909871572408b5dddd0ed3a5e902f"
     },
+    "beautify-github-readme": {
+      "source": "oil-oil/beautify-github-readme",
+      "sourceType": "github",
+      "skillPath": "skills/beautify-github-readme/SKILL.md",
+      "computedHash": "9e42ffcf32d0852b2cb2a574c00d251400891671e3c9027886189e264cd27487"
+    },
+    "nuxt": {
+      "source": "onmax/nuxt-skills",
+      "sourceType": "github",
+      "skillPath": "skills/nuxt/SKILL.md",
+      "computedHash": "96fb2dfb0497df734b4cd7a03aed61ea68f9e195d07734999fd54e72b465665e"
+    },
+    "nuxt-modules": {
+      "source": "onmax/nuxt-skills",
+      "sourceType": "github",
+      "skillPath": "skills/nuxt-modules/SKILL.md",
+      "computedHash": "62fada92ed05a94cf902d1a834ace66f2b5d4671fa60cd8738a1fd6ffe8ea4cb"
+    },
     "postgresql": {
       "source": "sickn33/agentic-awesome-skills",
       "sourceType": "github",
