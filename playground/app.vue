@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const postgrest = usePostgrest()
+const client = usePostgrest()
 const { loggedIn, user, fetch: refreshSession, clear } = useUserSession()
 
 const { data: todos, refresh } = await useAsyncData('todos', async () => {
-  const { data, error } = await postgrest.from('todos').select('id, title, is_public, owner').order('id')
+  const { data, error } = await client.from('todos').select('id, title, is_public, owner').order('id')
   if (error) throw error
   return data
 })
