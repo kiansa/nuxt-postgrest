@@ -8,7 +8,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "nuxt": "^4.5.2",
+    "nuxt": "^4.6.2",
     "nuxt-auth-utils": "^0.5.30",
     "nuxt-postgrest": "workspace:*"
   }

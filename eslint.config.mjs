@@ -21,5 +21,9 @@ export default createConfigForNuxt({
     files: ['**/pages/**/*.vue', '**/app.vue'],
     rules: { 'vue/multi-word-component-names': 'off' },
   }, {
+    // Vendored from nuxt/nuxt's loading screen; keep its style so it stays diffable against upstream
+    files: ['docs/app/assets/hero-shader/**'],
+    rules: { '@stylistic/max-statements-per-line': 'off' },
+  }, {
     ignores: ['docs/.data', 'docs/.output', 'docs/.nuxt'],
   })

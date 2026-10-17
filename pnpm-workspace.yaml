@@ -11,3 +11,9 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@iconify-json/simple-icons@1.2.97'
   - '@iconify-json/vscode-icons@1.2.79'
+  - '@nuxt/kit@4.6.2'
+  - '@nuxt/nitro-server@4.6.2'
+  - '@nuxt/schema@4.6.2'
+  - '@nuxt/vite-builder@4.6.2'
+  - '@nuxt/vite-server@4.6.2'
+  - nuxt@4.6.2

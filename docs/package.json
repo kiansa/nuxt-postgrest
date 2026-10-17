@@ -3,16 +3,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --port 3002",
     "build": "nuxt build",
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.135",
-    "@iconify-json/simple-icons": "^1.2.97",
-    "@iconify-json/vscode-icons": "^1.2.79",
-    "better-sqlite3": "^12.11.1",
-    "docus": "^5.13.0",
-    "nuxt": "^4.5.2"
+    "@iconify-json/lucide": "^1.2.145",
+    "@iconify-json/simple-icons": "^1.2.100",
+    "@iconify-json/vscode-icons": "^1.2.90",
+    "@nuxtjs/mdc": "^0.23.2",
+    "better-sqlite3": "^13.0.3",
+    "docus": "^5.15.0",
+    "nuxt": "^4.6.2"
   }
 }

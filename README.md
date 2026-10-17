@@ -29,8 +29,10 @@ export default defineNuxtConfig({
 
 ```vue
 <script setup lang="ts">
+const client = usePostgrest()
+
 const { data } = await useAsyncData('todos', async () => {
-  const { data, error } = await usePostgrest().from('todos').select('*')
+  const { data, error } = await client.from('todos').select('*')
   if (error) throw error
   return data
 })

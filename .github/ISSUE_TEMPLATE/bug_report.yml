@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         StackBlitz can't run PostgREST, so please reproduce against a local `docker-compose.yml`
-        (see [Local PostgREST](https://kiansa.github.io/nuxt-postgrest/getting-started/local-postgrest)) or a minimal repo.
+        (see [Local PostgREST](https://kiansa.github.io/nuxt-postgrest/playbooks/local-postgrest)) or a minimal repo.
   - type: input
     id: reproduction
     attributes:
