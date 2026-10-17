@@ -17,3 +17,4 @@ minimumReleaseAgeExclude:
   - '@nuxt/vite-builder@4.6.2'
   - '@nuxt/vite-server@4.6.2'
   - nuxt@4.6.2
+  - '@nuxt/test-utils@4.3.4'
