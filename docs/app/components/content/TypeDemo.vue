@@ -5,7 +5,7 @@
       <span class="size-2.5 rounded-full bg-red-400/80" />
       <span class="size-2.5 rounded-full bg-amber-400/80" />
       <span class="size-2.5 rounded-full bg-emerald-400/80" />
-      <span class="ml-3 font-mono text-xs text-muted">pages/todos.vue</span>
+      <span class="ml-3 font-mono text-xs text-muted">app/pages/todos.vue</span>
     </div>
 
     <pre class="overflow-x-auto p-4 font-mono text-[13px] leading-7 text-default"><code><span class="text-sky-600 dark:text-sky-300">const</span> { data } = <span class="text-sky-600 dark:text-sky-300">await</span> <span class="text-amber-600 dark:text-amber-300">usePostgrest</span>()
