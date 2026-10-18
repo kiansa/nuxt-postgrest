@@ -62,12 +62,12 @@
     "typecheck:project": "node scripts/typecheck.mjs"
   },
   "dependencies": {
-    "@nuxt/kit": "^4.6.1",
+    "@nuxt/kit": "^4.0.0",
     "@supabase/postgrest-js": "^2.118.0",
     "jose": "^6.2.12"
   },
   "peerDependencies": {
-    "nuxt": ">=4.6.1"
+    "nuxt": ">=4.0.0"
   },
   "devDependencies": {
     "@nuxt/devtools": "^3.4.3",

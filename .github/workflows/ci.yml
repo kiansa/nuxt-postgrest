@@ -33,7 +33,7 @@ jobs:
       fail-fast: false
       matrix:
         # `locked` is the version in the lockfile; the other is the oldest Nuxt the module supports
-        nuxt: [locked, '4.6.1']
+        nuxt: [locked, '4.0.0']
     services:
       postgres:
         image: postgres:18

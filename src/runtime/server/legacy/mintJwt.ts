@@ -1,0 +1,15 @@
+// Nuxt 4.0 to 4.5: the server helpers come from `#imports`, which Nuxt 4.6+ replaces with `nuxt/server`
+// (see ../utils). The logic lives in shared/utils/serverCore.ts.
+import { useRuntimeConfig } from '#imports'
+import { signPostgrestJwt } from '../../shared/utils/serverCore'
+import type { MintJwtClaims, MintJwtOptions } from '../../shared/utils/serverCore'
+
+export type { MintJwtClaims, MintJwtOptions }
+
+/**
+ * Sign a PostgREST JWT (HS256) with `NUXT_POSTGREST_JWT_SECRET`, which must equal PostgREST's `jwt-secret`.
+ * Server routes only.
+ */
+export function mintJwt(claims: MintJwtClaims, options: MintJwtOptions = {}): Promise<string> {
+  return signPostgrestJwt(useRuntimeConfig().postgrestJwtSecret, claims, options)
+}

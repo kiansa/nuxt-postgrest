@@ -5,6 +5,7 @@ import {
   addTemplate,
   createResolver,
   defineNuxtModule,
+  getNuxtVersion,
   resolvePath,
 } from '@nuxt/kit'
 
@@ -12,7 +13,7 @@ export default defineNuxtModule({
   meta: {
     name: 'nuxt-postgrest',
     compatibility: {
-      nuxt: '>=4.6.1',
+      nuxt: '>=4.0.0',
     },
   },
   async setup(_options, nuxt) {
@@ -44,16 +45,26 @@ export default defineNuxtModule({
       { name: 'createPostgrestClient', from: shared },
     ])
 
+    // Nuxt 4.6+ ships `nuxt/server`, the portable server helpers that also work on Nuxt 5 (Nitro v3). Older
+    // Nuxt has no such entry point, so it gets an equivalent built on h3. Both sit on the same shared core.
+    const server = hasPortableServerHelpers(getNuxtVersion(nuxt)) ? './runtime/server/utils' : './runtime/server/legacy'
+
     addServerImports([
-      { name: 'usePostgrestUser', from: resolver.resolve('./runtime/server/utils/usePostgrestUser') },
-      { name: 'usePostgrestAdmin', from: resolver.resolve('./runtime/server/utils/usePostgrestAdmin') },
-      { name: 'mintJwt', from: resolver.resolve('./runtime/server/utils/mintJwt') },
-      { name: 'setPostgrestToken', from: resolver.resolve('./runtime/server/utils/postgrestToken') },
-      { name: 'clearPostgrestToken', from: resolver.resolve('./runtime/server/utils/postgrestToken') },
+      { name: 'usePostgrestUser', from: resolver.resolve(`${server}/usePostgrestUser`) },
+      { name: 'usePostgrestAdmin', from: resolver.resolve(`${server}/usePostgrestAdmin`) },
+      { name: 'mintJwt', from: resolver.resolve(`${server}/mintJwt`) },
+      { name: 'setPostgrestToken', from: resolver.resolve(`${server}/postgrestToken`) },
+      { name: 'clearPostgrestToken', from: resolver.resolve(`${server}/postgrestToken`) },
       { name: 'createPostgrestClient', from: shared },
     ])
   },
 })
+
+/** `nuxt/server` (the portable server helpers) exists from Nuxt 4.6 on. */
+function hasPortableServerHelpers(version: string): boolean {
+  const [major = 0, minor = 0] = version.split(/[.-]/).map(Number)
+  return major > 4 || (major === 4 && minor >= 6)
+}
 
 declare module '@nuxt/schema' {
   interface PublicRuntimeConfig {

@@ -1,7 +1,8 @@
 import type { RequestEvent } from 'nuxt/server'
 import { deleteCookie, getRequestProtocol, setCookie } from 'nuxt/server'
-import type { ServerEvent } from '../../shared/types'
-import { POSTGREST_TOKEN_COOKIE, getJwtExpiry } from '../../shared/utils/token'
+import { tokenCookieOptions } from '../../shared/utils/serverCore'
+import { POSTGREST_TOKEN_COOKIE } from '../../shared/utils/token'
+import type { ServerEvent } from './serverEvent'
 
 /**
  * Store the user's PostgREST JWT in the token cookie, so `usePostgrest()` (including after client-side
@@ -11,23 +12,11 @@ import { POSTGREST_TOKEN_COOKIE, getJwtExpiry } from '../../shared/utils/token'
  * token's `exp`, and is `Secure` whenever the request came in over HTTPS.
  */
 export function setPostgrestToken(event: ServerEvent, token: string): void {
-  const expiry = getJwtExpiry(token)
-  const now = Math.floor(Date.now() / 1000)
-
-  if (expiry !== undefined && expiry <= now) {
-    throw new Error('[nuxt-postgrest] Refusing to store an expired token.')
-  }
-
   // `nuxt/server` helpers are typed against `RequestEvent` but also run on h3 v1 events
   const requestEvent = event as RequestEvent
+  const secure = getRequestProtocol(requestEvent, { xForwardedProto: true }) === 'https'
 
-  setCookie(requestEvent, POSTGREST_TOKEN_COOKIE, token, {
-    path: '/',
-    sameSite: 'lax',
-    httpOnly: false,
-    secure: getRequestProtocol(requestEvent, { xForwardedProto: true }) === 'https',
-    ...(expiry !== undefined && { maxAge: expiry - now }),
-  })
+  setCookie(requestEvent, POSTGREST_TOKEN_COOKIE, token, tokenCookieOptions(token, secure))
 }
 
 /** Remove the token cookie, for example on logout. Requests then fall back to the anon key. */
