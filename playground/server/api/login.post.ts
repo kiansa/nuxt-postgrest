@@ -1,13 +1,12 @@
-import { signDevJwt } from '../utils/jwt'
-
-// Demo only: mint a PostgREST JWT for "alice" and keep it in the session.
+// Demo only. Any auth library fits here: sign the user in with it, then store a PostgREST JWT for them.
 export default defineEventHandler(async (event) => {
-  const token = signDevJwt({ role: 'authenticated', sub: 'alice' })
-  await setUserSession(event, {
-    user: { name: 'alice' },
-    // Visible to the client so usePostgrest() can call PostgREST directly from the browser.
-    // Put it under `secure` instead if you only query from server routes.
-    postgrest_token: token,
-  })
+  // 1. Your auth library (nuxt-auth-utils in this playground)
+  await setUserSession(event, { user: { name: 'alice' } })
+
+  // 2. A PostgREST JWT for that user, in the cookie usePostgrest() reads, so
+  //    queries run as them after client-side navigation too.
+  const token = await mintJwt({ role: 'authenticated', sub: 'alice' }, { expiresIn: useRuntimeConfig(event).session.maxAge })
+  setPostgrestToken(event, token)
+
   return { ok: true }
 })

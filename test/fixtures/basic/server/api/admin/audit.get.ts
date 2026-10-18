@@ -4,10 +4,10 @@ export default defineEventHandler(async () => {
   // Both ways of targeting a non-default schema
   const viaSchemaMethod = await usePostgrestAdmin().schema('internal').from('audit_log').select('message')
 
-  const { url } = useRuntimeConfig().public.postgrest
+  const { postgrestUrl: url } = useRuntimeConfig().public
   const internal = createPostgrestClient<Database, 'internal'>({
     url,
-    key: useRuntimeConfig().postgrest.secretKey,
+    key: useRuntimeConfig().postgrestSecretKey,
     schema: 'internal',
   })
   const viaFactory = await internal.from('audit_log').select('message')

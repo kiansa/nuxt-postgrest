@@ -1,11 +1,8 @@
-import { signDevJwt } from '../utils/jwt'
-
-// ?where=secure → token only on the server; default → client-visible session field
+// Stands in for "any auth library signed the user in": mint a PostgREST JWT and store it in the cookie.
+// ?as=alice picks the user, ?ttl=60 the lifetime in seconds.
 export default defineEventHandler(async (event) => {
-  const { as = 'alice', where } = getQuery(event) as { as?: string, where?: string }
-  const token = signDevJwt({ role: 'authenticated', sub: as })
-  await setUserSession(event, where === 'secure'
-    ? { user: { name: as }, secure: { postgrest_token: token } }
-    : { user: { name: as }, postgrest_token: token })
+  const { as = 'alice', ttl } = getQuery(event) as { as?: string, ttl?: string }
+  const token = await mintJwt({ role: 'authenticated', sub: as }, ttl ? { expiresIn: Number(ttl) } : {})
+  setPostgrestToken(event, token)
   return { ok: true }
 })

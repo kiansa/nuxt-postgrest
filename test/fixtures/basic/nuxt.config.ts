@@ -1,17 +1,13 @@
 import NuxtPostgrest from '../../../src/module'
 
 export default defineNuxtConfig({
-  modules: ['nuxt-auth-utils', NuxtPostgrest],
+  modules: [NuxtPostgrest],
   runtimeConfig: {
-    postgrest: {
-      secretKey: process.env.NUXT_POSTGREST_SECRET_KEY || '',
+    public: {
+      postgrestUrl: process.env.POSTGREST_URL || 'http://localhost:3001',
     },
-    session: {
-      password: 'test-session-password-that-is-long-enough-32',
-    },
+    postgrestSecretKey: process.env.NUXT_POSTGREST_SECRET_KEY || '',
+    postgrestJwtSecret: process.env.NUXT_POSTGREST_JWT_SECRET || '',
   },
   compatibilityDate: 'latest',
-  postgrest: {
-    url: process.env.POSTGREST_URL || 'http://localhost:3001',
-  },
 })

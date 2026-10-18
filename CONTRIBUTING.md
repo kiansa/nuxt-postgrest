@@ -25,7 +25,7 @@ The module requires Nuxt 4+; CI tests against the pinned version plus a nightly 
 ## Project layout
 
 ```
-src/module.ts              module definition, runtime config, type-gen hook, nuxt-auth-utils detection
+src/module.ts              module definition, runtime config, type-gen hook, server auto-imports
 src/runtime/shared/         createPostgrestClient — the one place a PostgrestClient is built
 src/runtime/app/            usePostgrest (client & SSR)
 src/runtime/server/         usePostgrestUser, usePostgrestAdmin (Nitro only)
@@ -38,9 +38,9 @@ db/seed.sql, docker-compose.yml, docker-compose.postgrest.yml   local Postgres +
 
 ## Auth
 
-`nuxt-auth-utils` is the only auth library the module knows about, and it's the only one worth special-casing: it's detected once in `setup()` via `hasNuxtModule`, and that boolean decides the *contents* of two small code-generated files (`postgrest-token-app.ts` / `postgrest-token-server.ts`, written via `addTemplate`) — real code reading the session when it's installed, a one-line stub returning `undefined` when it's not. This is deliberate: a static top-level `import { useUserSession } from '#imports'` in a published module's runtime would break the build for any app that doesn't have `nuxt-auth-utils` installed, since that auto-import wouldn't exist for them.
+The module doesn't know about any auth library. After a user signs in with whatever library the app uses, the app calls `mintJwt()` (signs a PostgREST JWT with `NUXT_POSTGREST_JWT_SECRET`, via `jose`) and `setPostgrestToken()` (stores it in the `nuxt_postgrest_token` cookie (a fixed constant, not configurable)). `usePostgrest()` and `usePostgrestUser()` read that cookie; the app side reads `document.cookie` per request in the browser so a long-lived client never goes stale. The cookie is deliberately not `HttpOnly`: browser-side queries after client-side navigation need the token.
 
-There's no pluggable-provider mechanism beyond this. Every other auth library is out of scope for the module — users read their own session however their library exposes it, and pass the resulting token to `usePostgrest({ token })` / `usePostgrestUser(event, { token })` themselves. If you're touching this, keep it to those two template files in `src/module.ts`; don't reintroduce a per-provider adapter directory.
+Token resolution is `options.token` → token cookie (ignored once its `exp` has passed) → anon key → no header. There is no refresh mechanism and no per-library adapter; don't add one. Library-specific recipes belong in the docs.
 
 ## Releasing (maintainers)
 

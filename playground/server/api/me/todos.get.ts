@@ -1,7 +1,6 @@
-// User client: RLS applies as the logged-in user (token read from the session)
+// User client: RLS applies as the logged-in user (token read from the cookie)
 export default defineEventHandler(async (event) => {
-  const client = await usePostgrestUser(event)
-  const { data, error } = await client.from('todos').select('*').order('id')
+  const { data, error } = await usePostgrestUser(event).from('todos').select('*').order('id')
   if (error) throw createError({ statusCode: 500, message: error.message })
   return data
 })

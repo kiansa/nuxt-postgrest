@@ -61,7 +61,8 @@
   "dependencies": {
     "@nuxt/kit": "^4.6.2",
     "@supabase/postgrest-js": "^2.118.0",
-    "defu": "^6.1.7"
+    "defu": "^6.1.7",
+    "jose": "^6.2.12"
   },
   "devDependencies": {
     "@nuxt/devtools": "^3.4.3",

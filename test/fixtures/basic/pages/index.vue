@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// SSR: token comes from the nuxt-auth-utils session (client-visible field)
+// SSR: the token comes from the token cookie
 const client = usePostgrest()
 const { data } = await useAsyncData('todos', async () => {
   const { data, error } = await client.from('todos').select('title').order('id')

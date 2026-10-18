@@ -175,6 +175,9 @@ importers:
       defu:
         specifier: ^6.1.7
         version: 6.1.7
+      jose:
+        specifier: ^6.2.12
+        version: 6.2.12
     devDependencies:
       '@nuxt/devtools':
         specifier: ^3.4.3

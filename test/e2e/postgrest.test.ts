@@ -15,17 +15,18 @@ function sign(claims: Record<string, unknown>) {
 }
 
 process.env.NUXT_POSTGREST_SECRET_KEY = sign({ role: 'service_role' })
+process.env.NUXT_POSTGREST_JWT_SECRET = JWT_SECRET
 
 const reachable = await globalThis.fetch(POSTGREST_URL).then(() => true, () => false)
 if (!reachable && process.env.CI) {
   throw new Error(`PostgREST is not reachable at ${POSTGREST_URL}`)
 }
 
-async function loginCookie(query: string) {
+async function login(query: string) {
   const res = await fetch(`/api/login?${query}`, { method: 'POST' })
-  const cookie = res.headers.get('set-cookie')?.split(';')[0]
-  expect(cookie).toBeTruthy()
-  return cookie!
+  const setCookie = res.headers.get('set-cookie') ?? ''
+  expect(setCookie).toContain('nuxt_postgrest_token=')
+  return { setCookie, cookie: setCookie.split(';')[0]! }
 }
 
 describe.skipIf(!reachable)('nuxt-postgrest (e2e)', async () => {
@@ -37,18 +38,43 @@ describe.skipIf(!reachable)('nuxt-postgrest (e2e)', async () => {
     expect(await $fetch('/api/me/todos')).toEqual(['Public todo'])
   })
 
-  it('usePostgrestUser forwards the session token (client-visible field)', async () => {
-    const cookie = await loginCookie('as=alice')
+  it('usePostgrestUser forwards the token cookie', async () => {
+    const { cookie } = await login('as=alice')
     expect(await $fetch('/api/me/todos', { headers: { cookie } })).toEqual(['Public todo', 'Alice private todo'])
   })
 
-  it('usePostgrestUser prefers the server-only `secure` session field', async () => {
-    const cookie = await loginCookie('as=bob&where=secure')
-    expect(await $fetch('/api/me/todos', { headers: { cookie } })).toEqual(['Public todo', 'Bob private todo'])
+  it('setPostgrestToken writes a browser-readable cookie that lasts as long as the token', async () => {
+    const { setCookie } = await login('as=alice')
+    expect(setCookie).not.toMatch(/httponly/i)
+    expect(setCookie).toMatch(/samesite=lax/i)
+    expect(setCookie).toContain('Path=/')
+    // mintJwt defaults to 1h
+    const maxAge = Number(/max-age=(\d+)/i.exec(setCookie)?.[1])
+    expect(maxAge).toBeGreaterThan(3500)
+    expect(maxAge).toBeLessThanOrEqual(3600)
   })
 
-  it('an explicit token overrides the session token', async () => {
-    const cookie = await loginCookie('as=alice')
+  it('mintJwt honours expiresIn', async () => {
+    const { setCookie } = await login('as=alice&ttl=120')
+    const maxAge = Number(/max-age=(\d+)/i.exec(setCookie)?.[1])
+    expect(maxAge).toBeGreaterThan(100)
+    expect(maxAge).toBeLessThanOrEqual(120)
+  })
+
+  it('an expired token cookie is ignored instead of failing', async () => {
+    const expired = sign({ role: 'authenticated', sub: 'alice', exp: Math.floor(Date.now() / 1000) - 60 })
+    expect(await $fetch('/api/me/todos', { headers: { cookie: `nuxt_postgrest_token=${expired}` } })).toEqual(['Public todo'])
+  })
+
+  it('clearPostgrestToken removes the cookie', async () => {
+    const res = await fetch('/api/logout', { method: 'POST' })
+    const setCookie = res.headers.get('set-cookie') ?? ''
+    expect(setCookie).toContain('nuxt_postgrest_token=;')
+    expect(setCookie).toMatch(/max-age=0/i)
+  })
+
+  it('an explicit token overrides the cookie', async () => {
+    const { cookie } = await login('as=alice')
     expect(await $fetch('/api/me/explicit', { headers: { cookie } })).toEqual(['Public todo', 'Bob private todo'])
   })
 
@@ -65,7 +91,7 @@ describe.skipIf(!reachable)('nuxt-postgrest (e2e)', async () => {
     expect(anon).toContain('Public todo')
     expect(anon).not.toContain('Alice private todo')
 
-    const cookie = await loginCookie('as=alice')
+    const { cookie } = await login('as=alice')
     const html = await $fetch<string>('/', { headers: { cookie } })
     expect(html).toContain('Alice private todo')
     expect(html).not.toContain('Bob private todo')

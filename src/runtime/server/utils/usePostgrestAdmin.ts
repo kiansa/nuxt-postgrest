@@ -13,11 +13,11 @@ export function usePostgrestAdmin(): PostgrestClient<Database> {
   if (adminClient) return adminClient
 
   const config = useRuntimeConfig()
-  const { url } = config.public.postgrest
-  const { secretKey } = config.postgrest
+  const { postgrestUrl: url } = config.public
+  const { postgrestSecretKey: secretKey } = config
 
   if (!url) {
-    throw new Error('[nuxt-postgrest] Missing PostgREST URL. Set `postgrest.url` or NUXT_PUBLIC_POSTGREST_URL.')
+    throw new Error('[nuxt-postgrest] Missing PostgREST URL. Set NUXT_PUBLIC_POSTGREST_URL or `runtimeConfig.public.postgrestUrl`.')
   }
   if (!secretKey) {
     throw new Error('[nuxt-postgrest] Missing NUXT_POSTGREST_SECRET_KEY for admin access.')

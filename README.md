@@ -9,7 +9,7 @@ First-class [PostgREST](https://postgrest.org) for [Nuxt](https://nuxt.com): typ
 - 🔒 Forwards the logged-in user's JWT so Postgres row-level security applies
 - 🧠 Fully typed from your generated `Database` type — tables, columns and schemas checked at compile time
 - 🌐 One client for components, pages and Nitro server routes, SSR included
-- 🔑 Reads sessions from [`nuxt-auth-utils`](https://github.com/atinux/nuxt-auth-utils) automatically, or pass any JWT
+- 🔑 Works with any auth library: `mintJwt()` a PostgREST JWT after sign-in, `setPostgrestToken()` stores it
 - 🗂️ Switch Postgres schemas or build per-tenant clients on demand
 - 🪶 A thin layer over the battle-tested `postgrest-js` query builder — nothing new to learn
 
@@ -23,7 +23,9 @@ npx nuxi module add nuxt-postgrest
 // nuxt.config.ts
 export default defineNuxtConfig({
   modules: ['nuxt-postgrest'],
-  postgrest: { url: 'http://localhost:3001' },
+  runtimeConfig: {
+    public: { postgrestUrl: 'http://localhost:3001' },
+  },
 })
 ```
 

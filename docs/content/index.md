@@ -83,7 +83,7 @@ The logged-in user's token is attached for you: in components, during SSR and in
   ```ts [Server route]
   // server/api/my-todos.get.ts
   export default defineEventHandler(async (event) => {
-    const client = await usePostgrestUser(event)
+    const client = usePostgrestUser(event)
     const { data, error } = await client.from('todos').select('*')
     if (error) throw createError({ statusCode: 500, message: error.message })
     return data
@@ -189,7 +189,7 @@ Everything a PostgREST app needs
   Auth integration
 
   #description
-  Reads tokens from `nuxt-auth-utils` sessions automatically, or pass any JWT from the auth library you already use.
+  Use any auth library. Mint a JWT with `mintJwt()`, store it with `setPostgrestToken()`, and every query runs as that user.
   :::
 
   :::u-page-card

@@ -1,12 +1,13 @@
 import type { H3Event } from 'h3'
+import { getCookie } from 'h3'
 import type { PostgrestClient } from '@supabase/postgrest-js'
 import { createPostgrestClient } from '../../shared/utils/createPostgrestClient'
-import { getAccessToken } from '#postgrest-token/server'
+import { POSTGREST_TOKEN_COOKIE, getUsableToken } from '../../shared/utils/token'
 import { useRuntimeConfig } from '#imports'
 import type { Database } from '#build/types/postgrest-database'
 
 export interface UsePostgrestUserOptions {
-  /** Explicit JWT. Takes precedence over the session token and the anon key. */
+  /** Explicit JWT. Takes precedence over the token cookie and the anon key. */
   token?: string
   /** Extra headers merged into every request. */
   headers?: Record<string, string>
@@ -16,20 +17,18 @@ export interface UsePostgrestUserOptions {
  * PostgREST client acting as the requesting user, for Nitro server routes.
  * Row-level security applies as that user.
  *
- * Token resolution: `options.token` → session token (nuxt-auth-utils, if installed) → public anon key → no header.
+ * Token resolution: `options.token` → token cookie (see `setPostgrestToken`) → public anon key → no header.
  */
-export async function usePostgrestUser(event: H3Event, options: UsePostgrestUserOptions = {}): Promise<PostgrestClient<Database>> {
-  const { url, key, tokenKey } = useRuntimeConfig(event).public.postgrest
+export function usePostgrestUser(event: H3Event, options: UsePostgrestUserOptions = {}): PostgrestClient<Database> {
+  const { postgrestUrl: url, postgrestKey: key } = useRuntimeConfig(event).public
 
   if (!url) {
-    throw new Error('[nuxt-postgrest] Missing PostgREST URL. Set `postgrest.url` or NUXT_PUBLIC_POSTGREST_URL.')
+    throw new Error('[nuxt-postgrest] Missing PostgREST URL. Set NUXT_PUBLIC_POSTGREST_URL or `runtimeConfig.public.postgrestUrl`.')
   }
-
-  const token = options.token || await getAccessToken(event, tokenKey)
 
   return createPostgrestClient<Database>({
     url,
-    key: token || key || undefined,
+    key: options.token || getUsableToken(getCookie(event, POSTGREST_TOKEN_COOKIE)) || key || undefined,
     headers: options.headers,
   }) as PostgrestClient<Database>
 }

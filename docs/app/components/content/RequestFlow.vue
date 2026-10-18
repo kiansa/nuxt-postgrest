@@ -8,7 +8,7 @@ const nodes = [
 
 const order = [
   { label: 'options.token', hint: 'explicit' },
-  { label: 'session', hint: 'nuxt-auth-utils' },
+  { label: 'cookie', hint: 'token cookie' },
   { label: 'anon key', hint: 'public config' },
   { label: 'no header', hint: 'db-anon-role' },
 ]
