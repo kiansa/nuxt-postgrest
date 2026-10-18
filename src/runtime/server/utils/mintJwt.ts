@@ -1,6 +1,6 @@
 import { SignJWT } from 'jose'
 import type { JWTPayload } from 'jose'
-import { useRuntimeConfig } from '#imports'
+import { useRuntimeConfig } from 'nuxt/server'
 
 export interface MintJwtClaims extends JWTPayload {
   /** Postgres role PostgREST switches to for this token, e.g. `authenticated`. */

@@ -38,6 +38,9 @@
     "bin",
     "dist"
   ],
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "packageManager": "pnpm@12.14.0",
   "scripts": {
     "prepack": "nuxt-module-build build",
@@ -59,10 +62,12 @@
     "typecheck:project": "sh -c 'for c in app server shared; do vue-tsc --noEmit -p \"$0/.nuxt/tsconfig.$c.json\" || exit 1; done'"
   },
   "dependencies": {
-    "@nuxt/kit": "^4.6.2",
+    "@nuxt/kit": "^4.6.0",
     "@supabase/postgrest-js": "^2.118.0",
-    "defu": "^6.1.7",
     "jose": "^6.2.12"
+  },
+  "peerDependencies": {
+    "nuxt": ">=4.6.0"
   },
   "devDependencies": {
     "@nuxt/devtools": "^3.4.3",

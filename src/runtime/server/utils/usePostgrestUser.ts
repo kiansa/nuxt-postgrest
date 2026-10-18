@@ -1,9 +1,9 @@
-import type { H3Event } from 'h3'
-import { getCookie } from 'h3'
+import type { RequestEvent } from 'nuxt/server'
+import { getCookie, useRuntimeConfig } from 'nuxt/server'
 import type { PostgrestClient } from '@supabase/postgrest-js'
 import { createPostgrestClient } from '../../shared/utils/createPostgrestClient'
 import { POSTGREST_TOKEN_COOKIE, getUsableToken } from '../../shared/utils/token'
-import { useRuntimeConfig } from '#imports'
+import type { ServerEvent } from '../../shared/types'
 import type { Database } from '#build/types/postgrest-database'
 
 export interface UsePostgrestUserOptions {
@@ -19,8 +19,8 @@ export interface UsePostgrestUserOptions {
  *
  * Token resolution: `options.token` → token cookie (see `setPostgrestToken`) → public anon key → no header.
  */
-export function usePostgrestUser(event: H3Event, options: UsePostgrestUserOptions = {}): PostgrestClient<Database> {
-  const { postgrestUrl: url, postgrestKey: key } = useRuntimeConfig(event).public
+export function usePostgrestUser(event: ServerEvent, options: UsePostgrestUserOptions = {}): PostgrestClient<Database> {
+  const { postgrestUrl: url, postgrestKey: key } = useRuntimeConfig().public
 
   if (!url) {
     throw new Error('[nuxt-postgrest] Missing PostgREST URL. Set NUXT_PUBLIC_POSTGREST_URL or `runtimeConfig.public.postgrestUrl`.')
@@ -28,7 +28,7 @@ export function usePostgrestUser(event: H3Event, options: UsePostgrestUserOption
 
   return createPostgrestClient<Database>({
     url,
-    key: options.token || getUsableToken(getCookie(event, POSTGREST_TOKEN_COOKIE)) || key || undefined,
+    key: options.token || getUsableToken(getCookie(event as RequestEvent, POSTGREST_TOKEN_COOKIE)) || key || undefined,
     headers: options.headers,
   }) as PostgrestClient<Database>
 }

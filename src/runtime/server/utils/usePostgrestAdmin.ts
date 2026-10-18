@@ -1,6 +1,6 @@
 import type { PostgrestClient } from '@supabase/postgrest-js'
 import { createPostgrestClient } from '../../shared/utils/createPostgrestClient'
-import { useRuntimeConfig } from '#imports'
+import { useRuntimeConfig } from 'nuxt/server'
 import type { Database } from '#build/types/postgrest-database'
 
 let adminClient: PostgrestClient<Database> | undefined

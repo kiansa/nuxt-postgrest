@@ -12,7 +12,7 @@ export default defineNuxtModule({
   meta: {
     name: 'nuxt-postgrest',
     compatibility: {
-      nuxt: '>=4.0.0',
+      nuxt: '>=4.6.0',
     },
   },
   async setup(_options, nuxt) {
