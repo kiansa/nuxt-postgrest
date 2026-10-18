@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="470" viewBox="0 0 1200 470" role="img" aria-labelledby="title desc">
+  <title id="title">One request, four hops</title>
+  <desc id="desc">A request travels from your app through usePostgrest(), which attaches the user's JWT, to PostgREST, which verifies it and switches role, to Postgres, where row-level security decides which rows come back. The token is chosen in order: the token option, the cookie, the anon key, then no header.</desc>
+
+  <rect width="1200" height="470" rx="26" fill="#0b0d10"/>
+  <rect x="0.5" y="0.5" width="1199" height="469" rx="25.5" fill="none" stroke="#1f262e"/>
+
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="20">
+      <circle cx="72" cy="64" r="6" fill="#00dc82"/>
+      <rect x="86" y="63" width="34" height="2" fill="#00dc82"/>
+      <text x="134" y="71" fill="#8b929c" letter-spacing="1.5">HOW IT WORKS</text>
+    </g>
+    <text x="64" y="128" font-size="44" font-weight="800" fill="#e6e8eb" letter-spacing="-1">One request, <tspan fill="#00dc82">four hops</tspan></text>
+
+    <g id="hops" font-size="22">
+      <!-- connectors -->
+      <g stroke="#00dc82" stroke-width="2" fill="none">
+        <path d="M284 232 H340"/>
+        <path d="M584 232 H640" stroke-dasharray="4 8"/>
+        <path d="M884 232 H940" stroke-dasharray="4 8"/>
+      </g>
+      <g fill="#00dc82">
+        <circle cx="312" cy="232" r="6"/>
+        <circle cx="612" cy="232" r="6"/>
+        <circle cx="912" cy="232" r="6"/>
+      </g>
+      <g transform="translate(289 168)">
+        <rect width="70" height="32" rx="16" fill="#00dc82"/>
+        <text x="35" y="22" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" font-weight="700" fill="#04130c">JWT</text>
+      </g>
+
+      <!-- nodes -->
+      <g transform="translate(64 172)">
+        <rect width="220" height="120" rx="16" fill="#12161b" stroke="#1f262e"/>
+        <text x="110" y="52" text-anchor="middle" font-size="24" font-weight="700" fill="#e6e8eb">Your app</text>
+        <text x="110" y="84" text-anchor="middle" font-size="20" fill="#8b929c">page, component</text>
+        <text x="110" y="106" text-anchor="middle" font-size="20" fill="#8b929c">or server route</text>
+      </g>
+      <g transform="translate(364 172)">
+        <rect width="220" height="120" rx="16" fill="#12161b" stroke="#00dc8280"/>
+        <text x="110" y="52" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" font-weight="700" fill="#00dc82">usePostgrest()</text>
+        <text x="110" y="84" text-anchor="middle" font-size="20" fill="#8b929c">picks the right</text>
+        <text x="110" y="106" text-anchor="middle" font-size="20" fill="#8b929c">token for you</text>
+      </g>
+      <g transform="translate(664 172)">
+        <rect width="220" height="120" rx="16" fill="#12161b" stroke="#1f262e"/>
+        <text x="110" y="52" text-anchor="middle" font-size="24" font-weight="700" fill="#e6e8eb">PostgREST</text>
+        <text x="110" y="84" text-anchor="middle" font-size="20" fill="#8b929c">verifies the JWT,</text>
+        <text x="110" y="106" text-anchor="middle" font-size="20" fill="#8b929c">switches role</text>
+      </g>
+      <g transform="translate(964 172)">
+        <rect width="172" height="120" rx="16" fill="#12161b" stroke="#1f262e"/>
+        <text x="86" y="52" text-anchor="middle" font-size="24" font-weight="700" fill="#e6e8eb">Postgres</text>
+        <text x="86" y="84" text-anchor="middle" font-size="20" fill="#8b929c">RLS decides</text>
+        <text x="86" y="106" text-anchor="middle" font-size="20" fill="#8b929c">the rows</text>
+      </g>
+    </g>
+
+    <g id="token-order" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace">
+      <text x="64" y="348" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="20" fill="#8b929c">Which token? First match wins:</text>
+      <g font-size="20" fill="#e6e8eb" transform="translate(64 372)">
+        <rect width="228" height="46" rx="23" fill="#12161b" stroke="#1f262e"/>
+        <text x="114" y="30" text-anchor="middle">token option</text>
+        <path d="M244 23 h24 m-8 -8 l8 8 l-8 8" stroke="#00dc82" stroke-width="2" fill="none"/>
+        <g transform="translate(284 0)">
+          <rect width="150" height="46" rx="23" fill="#00dc8218" stroke="#00dc8260"/>
+          <text x="75" y="30" text-anchor="middle" fill="#00dc82">cookie</text>
+        </g>
+        <path d="M450 23 h24 m-8 -8 l8 8 l-8 8" stroke="#00dc82" stroke-width="2" fill="none"/>
+        <g transform="translate(490 0)">
+          <rect width="150" height="46" rx="23" fill="#12161b" stroke="#1f262e"/>
+          <text x="75" y="30" text-anchor="middle">anon key</text>
+        </g>
+        <path d="M656 23 h24 m-8 -8 l8 8 l-8 8" stroke="#00dc82" stroke-width="2" fill="none"/>
+        <g transform="translate(696 0)">
+          <rect width="176" height="46" rx="23" fill="#12161b" stroke="#1f262e"/>
+          <text x="88" y="30" text-anchor="middle">no header</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

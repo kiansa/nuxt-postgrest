@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc">
+  <title id="title">nuxt-postgrest</title>
+  <desc id="desc">nuxt-postgrest runs typed PostgREST queries as the signed-in user. With row-level security, an anonymous visitor sees one todo and Alice sees two.</desc>
+
+  <rect width="1200" height="400" rx="26" fill="#0b0d10"/>
+  <rect x="0.5" y="0.5" width="1199" height="399" rx="25.5" fill="none" stroke="#1f262e"/>
+
+  <g id="title-block" transform="translate(64 0)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+    <g id="eyebrow" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="20">
+      <circle cx="8" cy="80" r="6" fill="#00dc82"/>
+      <rect x="22" y="79" width="34" height="2" fill="#00dc82"/>
+      <text x="70" y="87" fill="#8b929c" letter-spacing="1.5">NUXT MODULE · POSTGREST CLIENT</text>
+    </g>
+
+    <text x="0" y="176" font-size="80" font-weight="800" fill="#e6e8eb" letter-spacing="-2">nuxt-<tspan fill="#00dc82">postgrest</tspan></text>
+
+    <text x="0" y="236" font-size="30" fill="#c3c8cf">Typed PostgREST queries that run</text>
+    <text x="0" y="276" font-size="30" fill="#c3c8cf">as the signed-in user.</text>
+
+    <g id="install" transform="translate(0 312)">
+      <rect width="548" height="52" rx="12" fill="#12161b" stroke="#1f262e"/>
+      <text x="22" y="34" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="20" fill="#e6e8eb"><tspan fill="#00dc82">$</tspan> npx nuxi module add nuxt-postgrest</text>
+    </g>
+  </g>
+
+  <g id="rls-proof" transform="translate(700 56)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+    <rect width="436" height="288" rx="18" fill="#12161b" stroke="#1f262e"/>
+
+    <text x="24" y="42" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="20" fill="#e6e8eb">todos</text>
+    <g transform="translate(298 20)">
+      <rect width="114" height="32" rx="16" fill="#00dc8218" stroke="#00dc8260"/>
+      <text x="57" y="22" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="18" fill="#00dc82">RLS on</text>
+    </g>
+    <rect x="24" y="68" width="388" height="1" fill="#1f262e"/>
+
+    <g id="row-public" transform="translate(0 84)">
+      <text x="24" y="30" font-size="22" fill="#e6e8eb">Public todo</text>
+      <rect x="296" y="6" width="116" height="34" rx="17" fill="#ffffff10"/>
+      <text x="354" y="30" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" fill="#8b929c">public</text>
+    </g>
+
+    <g id="row-alice" transform="translate(0 134)">
+      <text x="24" y="30" font-size="22" fill="#e6e8eb">Alice private todo</text>
+      <rect x="296" y="6" width="116" height="34" rx="17" fill="#00dc8220"/>
+      <text x="354" y="30" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" fill="#00dc82">alice</text>
+    </g>
+
+    <g id="row-bob" transform="translate(0 184)" opacity="0.45">
+      <text x="24" y="30" font-size="22" fill="#e6e8eb">Bob private todo</text>
+      <rect x="296" y="6" width="116" height="34" rx="17" fill="#ffffff10"/>
+      <text x="354" y="30" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" fill="#8b929c">bob</text>
+    </g>
+
+    <rect x="24" y="236" width="388" height="1" fill="#1f262e"/>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="20">
+      <text x="24" y="266" fill="#8b929c">anon <tspan fill="#e6e8eb">→ 1 row</tspan></text>
+      <text x="230" y="266" fill="#8b929c">alice <tspan fill="#00dc82">→ 2 rows</tspan></text>
+    </g>
+  </g>
+</svg>

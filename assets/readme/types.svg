@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">Typos fail at compile time</title>
+  <desc id="desc">A query selects the column "titel" from the todos table. The editor underlines it and reports that the column does not exist on todos. With the typo fixed, data is typed as an array of objects with id, title and done, or null.</desc>
+
+  <rect width="1200" height="430" rx="26" fill="#0b0d10"/>
+  <rect x="0.5" y="0.5" width="1199" height="429" rx="25.5" fill="none" stroke="#1f262e"/>
+
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="20">
+      <circle cx="72" cy="64" r="6" fill="#00dc82"/>
+      <rect x="86" y="63" width="34" height="2" fill="#00dc82"/>
+      <text x="134" y="71" fill="#8b929c" letter-spacing="1.5">TYPED FROM YOUR DATABASE</text>
+    </g>
+    <text x="64" y="128" font-size="44" font-weight="800" fill="#e6e8eb" letter-spacing="-1">Typos fail at <tspan fill="#00dc82">compile time</tspan></text>
+
+    <g id="editor" transform="translate(64 168)" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="22">
+      <rect width="640" height="206" rx="16" fill="#12161b" stroke="#1f262e"/>
+
+      <text x="28" y="44" fill="#8b929c">const</text>
+      <text x="100" y="44" fill="#e6e8eb">{ data } = await usePostgrest()</text>
+      <text x="56" y="82" fill="#e6e8eb">.from(<tspan fill="#00dc82">'todos'</tspan>)</text>
+      <text x="56" y="120" fill="#e6e8eb">.select(<tspan fill="#00dc82">'id, </tspan><tspan fill="#ff6b6b">titel</tspan><tspan fill="#00dc82">, done'</tspan>)</text>
+
+      <!-- wavy underline under "titel": ".select('id, " is 13 characters of 13.2 units, so it starts at 56 + 171.6; shorter than the word so narrower monospace fonts still line up -->
+      <path d="M229 132 q3 -6 6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0" stroke="#ff6b6b" stroke-width="2" fill="none"/>
+
+      <g transform="translate(24 146)">
+        <rect width="592" height="40" rx="10" fill="#ff6b6b18" stroke="#ff6b6b50"/>
+        <circle cx="22" cy="20" r="8" fill="none" stroke="#ff6b6b" stroke-width="2"/>
+        <path d="M18 16 l8 8 m0 -8 l-8 8" stroke="#ff6b6b" stroke-width="2"/>
+        <text x="42" y="27" font-size="19" fill="#e6e8eb">column 'titel' does not exist on 'todos'</text>
+      </g>
+    </g>
+
+    <g id="result" transform="translate(744 168)">
+      <rect width="392" height="206" rx="16" fill="#12161b" stroke="#00dc8260"/>
+      <text x="28" y="46" font-size="20" fill="#8b929c">Fix the typo, and the result is typed:</text>
+      <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" fill="#e6e8eb">
+        <text x="28" y="88"><tspan fill="#00dc82">data</tspan>:</text>
+        <text x="28" y="120">{ id: number</text>
+        <text x="54" y="150">title: string</text>
+        <text x="54" y="180">done: boolean }[] | null</text>
+      </g>
+    </g>
+  </g>
+</svg>
