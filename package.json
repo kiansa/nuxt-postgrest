@@ -58,8 +58,8 @@
     "test:unit": "vitest run --project unit",
     "test:e2e": "vitest run --project e2e",
     "test:watch": "vitest watch",
-    "test:types": "pnpm dev:prepare && nuxt prepare test/fixtures/basic && pnpm typecheck:project playground && pnpm typecheck:project test/fixtures/basic",
-    "typecheck:project": "sh -c 'for c in app server shared; do vue-tsc --noEmit -p \"$0/.nuxt/tsconfig.$c.json\" || exit 1; done'"
+    "test:types": "pnpm dev:prepare && nuxt prepare test/fixtures/basic && pnpm typecheck:project playground test/fixtures/basic",
+    "typecheck:project": "node scripts/typecheck.mjs"
   },
   "dependencies": {
     "@nuxt/kit": "^4.6.0",
