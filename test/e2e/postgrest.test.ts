@@ -66,6 +66,59 @@ describe.skipIf(!reachable)('nuxt-postgrest (e2e)', async () => {
     expect(await $fetch('/api/me/todos', { headers: { cookie: `nuxt_postgrest_token=${expired}` } })).toEqual(['Public todo'])
   })
 
+  describe('mintJwt', () => {
+    const claims = (token: string) => JSON.parse(Buffer.from(token.split('.')[1]!, 'base64url').toString())
+    const seconds = (ms = Date.now()) => Math.floor(ms / 1000)
+
+    it('defaults to one hour and signs the claims', async () => {
+      const { token } = await $fetch<{ token: string }>('/api/token/mint')
+      const payload = claims(token)
+      expect(payload).toMatchObject({ role: 'authenticated', sub: 'probe' })
+      expect(payload.exp - payload.iat).toBe(3600)
+    })
+
+    it('takes a duration string or seconds', async () => {
+      const minutes = await $fetch<{ token: string }>('/api/token/mint?in=15m')
+      expect(claims(minutes.token).exp - claims(minutes.token).iat).toBe(900)
+
+      const secondsOnly = await $fetch<{ token: string }>('/api/token/mint?in=90')
+      expect(claims(secondsOnly.token).exp - claims(secondsOnly.token).iat).toBe(90)
+    })
+
+    it('uses an absolute expiry, which wins over expiresIn', async () => {
+      const at = Date.now() + 2 * 3600 * 1000
+      const { token } = await $fetch<{ token: string }>(`/api/token/mint?at=${at}&in=15m`)
+      expect(claims(token).exp).toBe(seconds(at))
+    })
+
+    it('rejects an expiry in the past', async () => {
+      const { error } = await $fetch<{ error: string }>(`/api/token/mint?at=${Date.now() - 60_000}`)
+      expect(error).toContain('in the past')
+    })
+
+    it('produces a token PostgREST accepts', async () => {
+      const { token } = await $fetch<{ token: string }>('/api/token/mint')
+      const res = await globalThis.fetch(`${POSTGREST_URL}/todos`, { headers: { Authorization: `Bearer ${token}` } })
+      expect(res.status).toBe(200)
+    })
+  })
+
+  describe('setPostgrestToken', () => {
+    it('refuses to store an expired token', async () => {
+      const expired = sign({ role: 'authenticated', exp: Math.floor(Date.now() / 1000) - 60 })
+      const res = await $fetch<{ error: string }>(`/api/token/store?token=${expired}`, { method: 'POST' })
+      expect(res.error).toContain('expired')
+    })
+
+    it('marks the cookie Secure only for HTTPS requests', async () => {
+      const plain = await fetch('/api/login', { method: 'POST' })
+      expect(plain.headers.get('set-cookie')).not.toMatch(/;\s*secure/i)
+
+      const proxied = await fetch('/api/login', { method: 'POST', headers: { 'x-forwarded-proto': 'https' } })
+      expect(proxied.headers.get('set-cookie')).toMatch(/;\s*secure/i)
+    })
+  })
+
   it('clearPostgrestToken removes the cookie', async () => {
     const res = await fetch('/api/logout', { method: 'POST' })
     const setCookie = res.headers.get('set-cookie') ?? ''

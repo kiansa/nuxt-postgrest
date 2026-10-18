@@ -36,3 +36,21 @@ export function getUsableToken(token: string | null | undefined, now = Date.now(
 
   return token
 }
+
+/**
+ * Read one cookie from a `Cookie` header / `document.cookie` string. A cookie whose value can't be decoded
+ * counts as absent, so a malformed cookie can never break a request.
+ */
+export function readCookieValue(cookies: string, name: string): string | undefined {
+  for (const part of cookies.split('; ')) {
+    const index = part.indexOf('=')
+    if (part.slice(0, index) !== name) continue
+
+    try {
+      return decodeURIComponent(part.slice(index + 1))
+    }
+    catch {
+      return undefined
+    }
+  }
+}
