@@ -62,27 +62,27 @@
     "typecheck:project": "node scripts/typecheck.mjs"
   },
   "dependencies": {
-    "@nuxt/kit": "^4.0.0",
-    "@supabase/postgrest-js": "^2.118.0",
-    "jose": "^6.2.12"
+    "@supabase/postgrest-js": "^2.119.0",
+    "jose": "^6.2.15"
   },
   "peerDependencies": {
     "nuxt": ">=4.0.0"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^3.4.3",
+    "@nuxt/devtools": "^4.1.0",
     "@nuxt/eslint-config": "^1.17.0",
+    "@nuxt/kit": "^4.0.0",
     "@nuxt/module-builder": "^1.0.3",
-    "@nuxt/schema": "^4.6.2",
+    "@nuxt/schema": "^4.6.4",
     "@nuxt/test-utils": "^4.3.4",
     "@types/node": "latest",
     "changelogen": "^0.6.2",
-    "eslint": "^10.13.0",
+    "eslint": "^10.14.0",
     "h3": "^1.15.4",
-    "nuxt": "^4.6.2",
-    "nuxt-auth-utils": "^0.5.32",
+    "nuxt": "^4.6.4",
+    "nuxt-auth-utils": "^0.6.1",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.5",
-    "vue-tsc": "^3.3.13"
+    "vitest": "^5.1.0",
+    "vue-tsc": "^3.3.14"
   }
 }
