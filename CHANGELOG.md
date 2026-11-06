@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.1.1
+
+[compare changes](https://github.com/kiansa/nuxt-postgrest/compare/v0.1.0...v0.1.1)
+
+### 🏡 Chore
+
+- Update dependencies ([c79698c](https://github.com/kiansa/nuxt-postgrest/commit/c79698c)). The module itself is unchanged, so there is nothing to do when upgrading. What moved:
+  - Verified on Nuxt 4.6.4 (the lowest supported Nuxt is still 4.0.0, and CI still runs the suite on it). `@nuxt/kit` stays at `^4.0.0` so the module keeps building on older Nuxt.
+  - Dev tooling: `nuxt-auth-utils` 0.6, `@nuxt/devtools` 4, `vitest` 5, `eslint` 10.14, `vue-tsc` 3.3, `@supabase/postgrest-js` 2.119 and `jose` 6.2.15.
+  - The playground and the nuxt-auth-utils playbook use `NUXT_APP_SECRET`, which `nuxt-auth-utils` 0.6 and newer (Nuxt 4.6+) seals the session with. On 0.5 it is `NUXT_SESSION_PASSWORD`; nothing else on that page changes.
+  - `h3` (v1) and `typescript` (v6) were left on their current majors on purpose.
+
+### ❤️ Contributors
+
+- Kian Salout ([@kiansa](https://github.com/kiansa))
+
 ## v0.1.0
 
 [compare changes](https://github.com/kiansa/nuxt-postgrest/compare/v0.0.4...v0.1.0)
